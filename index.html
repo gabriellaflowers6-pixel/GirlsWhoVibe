@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Girls Who Vibe | Build What You Wish Existed</title>
+    <meta name="description" content="GWV is where girls build what they wish existed. Not for grades. Not for approval. For impact and ownership.">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <!-- React 18 + Babel Standalone -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+        :root {
+            --deep-purple: #1a0a2e;
+            --mid-purple: #2d1b4e;
+            --light-purple: #7b4f9e;
+            --bright-purple: #9b6fc0;
+            --warm-gold: #d4a853;
+            --bright-gold: #e8c875;
+            --silver: #c0c0c0;
+            --bright-silver: #d4d4d4;
+            --terracotta: #c44d3f;
+            --cream: #f5f0e8;
+            --near-black: #0d0a12;
+            --soft-pink: #d4729e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Work Sans', sans-serif;
+        }
+
+        .font-mono {
+            font-family: 'DM Mono', monospace;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--deep-purple);
+            color: var(--cream);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--mid-purple); }
+        ::-webkit-scrollbar-thumb { background: var(--light-purple); border-radius: 3px; }
+
+        /* ========== ANIMATIONS ========== */
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.12; }
+            50% { transform: translateY(-25px) rotate(3deg); opacity: 0.22; }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(212, 168, 83, 0.2), 0 0 40px rgba(192, 192, 192, 0.1); }
+            50% { box-shadow: 0 0 30px rgba(212, 168, 83, 0.4), 0 0 60px rgba(192, 192, 192, 0.2); }
+        }
+
+        @keyframes bounceDown {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(10px); }
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes underlineShimmer {
+            0% { background-position: -100% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        /* ========== SCROLL REVEAL ========== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+        .reveal-delay-4 { transition-delay: 0.4s; }
+
+        .reveal-scale {
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+        .reveal-scale.visible { opacity: 1; transform: scale(1); }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-30px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+        .reveal-left.visible { opacity: 1; transform: translateX(0); }
+
+        @media (prefers-reduced-motion: reduce) {
+            .reveal, .reveal-scale, .reveal-left {
+                opacity: 1 !important;
+                transform: none !important;
+                transition: none !important;
+            }
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* ========== NAV ========== */
+        .nav-fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(26, 10, 46, 0.92);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(123, 79, 158, 0.2);
+        }
+
+        .nav-link {
+            color: var(--cream);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+        .nav-link:hover { color: var(--warm-gold); background: rgba(212, 168, 83, 0.08); }
+        .nav-link.active { color: var(--warm-gold); }
+
+        /* Hamburger */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 8px;
+            z-index: 1100;
+            background: none;
+            border: none;
+        }
+        .hamburger span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: var(--cream);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+        .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .hamburger.open span:nth-child(2) { opacity: 0; }
+        .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            background: rgba(26, 10, 46, 0.98);
+            backdrop-filter: blur(20px);
+            z-index: 1050;
+            transform: translateX(100%);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+        }
+        .mobile-menu.open { transform: translateX(0); }
+        .mobile-menu a, .mobile-menu button.mobile-nav-link {
+            color: var(--cream);
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 600;
+            padding: 0.75rem 2rem;
+            transition: color 0.3s;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        .mobile-menu a:hover, .mobile-menu button.mobile-nav-link:hover { color: var(--warm-gold); }
+
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+            .desktop-nav { display: none !important; }
+        }
+
+        /* ========== BUTTONS ========== */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--warm-gold), var(--bright-gold));
+            color: var(--deep-purple);
+            font-weight: 700;
+            padding: 14px 32px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+            transition: left 0.5s ease;
+        }
+        .btn-primary:hover::after { left: 100%; }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(212, 168, 83, 0.4), 0 0 12px rgba(192, 192, 192, 0.15);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--warm-gold);
+            font-weight: 600;
+            padding: 12px 28px;
+            border-radius: 8px;
+            border: 2px solid var(--warm-gold);
+            cursor: pointer;
+            font-size: 1rem;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background: rgba(212, 168, 83, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(212, 168, 83, 0.2);
+        }
+
+        /* ========== HERO ========== */
+        .hero-bg {
+            background: linear-gradient(135deg, #1a0a2e 0%, #2d1b4e 30%, #3a1f5e 50%, #2d1b4e 70%, #1a0a2e 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .floating-word {
+            position: absolute;
+            font-family: 'DM Mono', monospace;
+            color: var(--light-purple);
+            font-weight: 300;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .scroll-arrow {
+            animation: bounceDown 2s ease-in-out infinite;
+            cursor: pointer;
+        }
+
+        /* ========== SECTION DIVIDER ========== */
+        .section-divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--warm-gold), var(--silver), var(--warm-gold), transparent);
+            opacity: 0.4;
+        }
+
+        /* ========== FLIP CARDS ========== */
+        .flip-card {
+            perspective: 1000px;
+            cursor: pointer;
+            min-height: 380px;
+        }
+        @media (max-width: 640px) {
+            .flip-card { min-height: 340px; }
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            min-height: inherit;
+            transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+            transform-style: preserve-3d;
+        }
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            min-height: inherit;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .flip-card-front {
+            background: linear-gradient(135deg, rgba(123, 79, 158, 0.2) 0%, rgba(45, 27, 78, 0.4) 100%);
+            border: 1px solid rgba(123, 79, 158, 0.4);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            text-align: center;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .flip-card:not(.flipped) .flip-card-front:hover {
+            border-color: var(--warm-gold);
+            box-shadow: 0 8px 32px rgba(212, 168, 83, 0.15), 0 0 8px rgba(192, 192, 192, 0.1);
+        }
+        .flip-card-back {
+            background: linear-gradient(135deg, rgba(45, 27, 78, 0.95) 0%, rgba(26, 10, 46, 0.98) 100%);
+            border: 1px solid var(--warm-gold);
+            transform: rotateY(180deg);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .flip-hint {
+            font-size: 0.75rem;
+            color: var(--light-purple);
+            margin-top: 1rem;
+            font-family: 'DM Mono', monospace;
+        }
+
+        .flow-arrow {
+            color: var(--warm-gold);
+            font-size: 1.2rem;
+            margin: 0.4rem 0;
+            text-align: center;
+        }
+
+        .flow-step {
+            padding: 0.6rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+        .flow-frustration {
+            background: rgba(196, 77, 63, 0.15);
+            border-left: 3px solid var(--terracotta);
+        }
+        .flow-notice {
+            background: rgba(123, 79, 158, 0.15);
+            border-left: 3px solid var(--bright-purple);
+        }
+        .flow-build {
+            background: rgba(212, 168, 83, 0.15);
+            border-left: 3px solid var(--warm-gold);
+        }
+
+        /* ========== SPARKLE ON FLIP ========== */
+        .sparkle-container { position: relative; }
+        .sparkle-container::before,
+        .sparkle-container::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0;
+        }
+        .flip-card.flipped .sparkle-container::before {
+            background: var(--warm-gold);
+            top: 10%;
+            right: 10%;
+            animation: sparkle 0.6s ease-out 0.2s forwards;
+        }
+        .flip-card.flipped .sparkle-container::after {
+            background: var(--silver);
+            bottom: 15%;
+            left: 8%;
+            animation: sparkle 0.6s ease-out 0.4s forwards;
+        }
+
+        /* ========== EVENT CARDS ========== */
+        .event-card {
+            background: linear-gradient(135deg, rgba(123, 79, 158, 0.12) 0%, rgba(45, 27, 78, 0.3) 100%);
+            border: 1px solid rgba(123, 79, 158, 0.3);
+            border-radius: 12px;
+            padding: 1.75rem;
+            transition: all 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .event-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(212, 168, 83, 0.4);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .event-card-featured {
+            background: linear-gradient(135deg, rgba(212, 168, 83, 0.08) 0%, rgba(45, 27, 78, 0.4) 100%);
+            border: 2px solid rgba(212, 168, 83, 0.5);
+            border-radius: 16px;
+            padding: 2.5rem;
+            position: relative;
+            transition: all 0.3s ease;
+            animation: pulseGlow 4s ease-in-out infinite;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .event-card-featured:hover {
+            transform: translateY(-6px);
+            border-color: var(--warm-gold);
+        }
+
+        .event-badge {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            border-radius: 6px;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+        .badge-gold { background: var(--warm-gold); color: var(--deep-purple); }
+        .badge-terracotta { background: var(--terracotta); color: var(--cream); }
+
+        .event-tag {
+            display: inline-block;
+            padding: 0.25rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            font-family: 'DM Mono', monospace;
+            background: rgba(123, 79, 158, 0.25);
+            color: var(--bright-purple);
+            border: 1px solid rgba(123, 79, 158, 0.4);
+        }
+
+        .flagship-badge {
+            position: absolute;
+            top: -1px;
+            right: 24px;
+            background: linear-gradient(135deg, var(--warm-gold), var(--bright-gold));
+            color: var(--deep-purple);
+            font-family: 'DM Mono', monospace;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            padding: 0.4rem 1rem;
+            border-radius: 0 0 8px 8px;
+        }
+
+        /* ========== GLASS CARD ========== */
+        .glass-card {
+            background: rgba(45, 27, 78, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(123, 79, 158, 0.25);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover {
+            border-color: rgba(212, 168, 83, 0.3);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        /* ========== OUTCOME BLOCKS ========== */
+        .outcome-block {
+            position: relative;
+            padding: 2rem;
+            padding-left: 2.5rem;
+            border-left: 2px solid rgba(212, 168, 83, 0.3);
+            transition: all 0.3s ease;
+        }
+        .outcome-block:hover {
+            border-left-color: var(--warm-gold);
+            background: rgba(212, 168, 83, 0.03);
+        }
+        .outcome-number {
+            position: absolute;
+            top: 0.5rem;
+            right: 1rem;
+            font-family: 'DM Mono', monospace;
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--warm-gold);
+            opacity: 0.08;
+            line-height: 1;
+            pointer-events: none;
+        }
+
+        /* ========== SHIMMER UNDERLINE ========== */
+        .shimmer-underline {
+            position: relative;
+            display: inline-block;
+        }
+        .shimmer-underline::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--warm-gold), var(--silver), var(--bright-gold), var(--silver), var(--warm-gold));
+            background-size: 200% 100%;
+            animation: underlineShimmer 3s linear infinite;
+            border-radius: 2px;
+        }
+
+        /* ========== ACCENT BORDER BLOCK ========== */
+        .accent-block {
+            border-left: 3px solid;
+            border-image: linear-gradient(to bottom, var(--warm-gold), var(--silver)) 1;
+            padding-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* ========== TUTORIAL PLACEHOLDER ========== */
+        .tutorial-placeholder {
+            background: rgba(123, 79, 158, 0.08);
+            border: 2px dashed rgba(123, 79, 158, 0.3);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            color: var(--light-purple);
+        }
+
+        /* ========== CONTAINER ========== */
+        .container-max {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* ========== FOCUS STATES ========== */
+        *:focus-visible {
+            outline: 2px solid var(--warm-gold);
+            outline-offset: 2px;
+        }
+
+        /* ========== SKIP LINK ========== */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--warm-gold);
+            color: var(--deep-purple);
+            padding: 8px 16px;
+            z-index: 2000;
+            font-weight: 600;
+            transition: top 0.3s;
+            text-decoration: none;
+        }
+        .skip-link:focus { top: 0; }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useRef, useEffect, useCallback } = React;
+
+        // ========== SCROLL REVEAL HOOK ==========
+        function useScrollReveal(threshold = 0.15) {
+            const ref = useRef(null);
+            const [isVisible, setIsVisible] = useState(false);
+
+            useEffect(() => {
+                const el = ref.current;
+                if (!el) return;
+                const observer = new IntersectionObserver(
+                    ([entry]) => {
+                        if (entry.isIntersecting) {
+                            setIsVisible(true);
+                            observer.unobserve(entry.target);
+                        }
+                    },
+                    { threshold, rootMargin: '0px 0px -40px 0px' }
+                );
+                observer.observe(el);
+                return () => observer.disconnect();
+            }, []);
+
+            return [ref, isVisible];
+        }
+
+        // ========== REVEAL WRAPPER ==========
+        function Reveal({ children, className = '', delay = 0, type = 'up' }) {
+            const [ref, isVisible] = useScrollReveal();
+            const baseClass = type === 'scale' ? 'reveal-scale' : type === 'left' ? 'reveal-left' : 'reveal';
+            const delayClass = delay > 0 ? 'reveal-delay-' + delay : '';
+
+            return (
+                <div ref={ref} className={baseClass + ' ' + delayClass + ' ' + (isVisible ? 'visible' : '') + ' ' + className}>
+                    {children}
+                </div>
+            );
+        }
+
+        // ========== DATA ==========
+        const flipCards = [
+            {
+                front: { title: 'Turn frustration into a build', subtitle: "See a problem? Don't just vent about it. Build something that actually fixes it." },
+                back: {
+                    frustration: { label: 'THE FRUSTRATION', text: '"Nobody gets me." Feeling unseen by parents and adults.' },
+                    notice: { label: 'NOTICE IT', text: 'What do I actually need them to understand?' },
+                    build: { label: 'BUILD IT', text: 'A conversation bridge tool with structured prompts that help teens and parents actually hear each other.' }
+                }
+            },
+            {
+                front: { title: 'Turn values into something real', subtitle: 'Care about something deeply? Turn that into a tool that helps people like you.' },
+                back: {
+                    frustration: { label: 'THE FRUSTRATION', text: '"I\'m raising myself." Parentification, adult responsibilities too young.' },
+                    notice: { label: 'NOTICE IT', text: 'I deserve support too. What would help ME?' },
+                    build: { label: 'BUILD IT', text: 'A boundary and self-care tracker. See the imbalance. Plan the conversation.' }
+                }
+            },
+            {
+                front: { title: 'Build with friends and allies', subtitle: 'Your crew. Your ideas. Real collaboration on something that matters.' },
+                back: {
+                    frustration: { label: 'THE FRUSTRATION', text: '"My school has nothing for me." No tutors, no resources, the system failed you.' },
+                    notice: { label: 'NOTICE IT', text: "I'm not broken. What do I actually need?" },
+                    build: { label: 'BUILD IT', text: 'A peer tutoring matcher or AI study buddy that explains things YOUR way.' }
+                }
+            },
+            {
+                front: { title: 'Think like a maker, not a consumer', subtitle: 'Stop scrolling. Start creating. That shift changes everything.' },
+                back: {
+                    frustration: { label: 'THE FRUSTRATION', text: '"I feel alone and nothing matters." Loneliness, disconnection.' },
+                    notice: { label: 'NOTICE IT', text: 'Isolation lies to you. Connection is a choice.' },
+                    build: { label: 'BUILD IT', text: 'A micro-community app. Small groups, weekly check-ins, real questions, no performative nonsense.' }
+                }
+            }
+        ];
+
+        const events = [
+            {
+                id: 'hackathon',
+                badge: 'MAR 6-8',
+                badgeColor: 'badge-gold',
+                title: 'Vibe Coding Hackathon',
+                description: 'Weekend build sprint with women builders. Bring an idea, leave with a prototype.',
+                details: 'AIDEDEQ is entering! We welcome partners, participants, and supporters.',
+                tag: '48-HOUR SPRINT',
+                cta: { text: 'Learn More', action: 'enroll' },
+                featured: false
+            },
+            {
+                id: 'iwd',
+                badge: 'MAR 8',
+                badgeColor: 'badge-terracotta',
+                title: "International Women's Day Build Event",
+                description: 'Lovable is free for 24 hours. Powered by Anthropic.',
+                details: 'AIDEDEQ will be online 3pm-5pm to build together, answer questions, and troubleshoot. Already have your free Lovable credits? Just click the Zoom link and jump in.',
+                tag: 'FREE BUILD DAY',
+                cta: { text: 'Join the Zoom', action: 'zoom' },
+                featured: false
+            },
+            {
+                id: 'camp1',
+                badge: 'MAR 16-22',
+                badgeColor: 'badge-gold',
+                title: 'Spring Build Camp 1',
+                description: 'Your idea. Your prototype. Your confidence. A full week of guided building.',
+                details: '1pm - 5pm daily on Zoom',
+                tag: 'WEEK-LONG CAMP',
+                cta: { text: 'Enroll Now', action: 'enroll' },
+                featured: true
+            },
+            {
+                id: 'camp2',
+                badge: 'MAR 23-29',
+                badgeColor: 'badge-gold',
+                title: 'Spring Build Camp 2',
+                description: 'Same magic, different week. Pick the schedule that fits your life.',
+                details: '10am - 2pm daily on Zoom',
+                tag: 'WEEK-LONG CAMP',
+                cta: { text: 'Enroll Now', action: 'enroll' },
+                featured: true
+            }
+        ];
+
+        const outcomes = [
+            { num: '01', title: 'A tool or product YOU built', desc: 'Not a class project. Something real that solves a real problem you care about.' },
+            { num: '02', title: 'A new way of thinking', desc: "Frustration, then clarity, then curiosity, then create, then share, then ship. That's the cycle." },
+            { num: '03', title: 'New people who get it', desc: 'Friends who build. Who care. Who might change the world alongside you.' },
+            { num: '04', title: 'Confidence that you can contribute', desc: "You're not just watching the future happen. You're making it." }
+        ];
+
+        const tutorialPlaceholders = [
+            'Getting Started with Lovable',
+            'Your First AI Prompt',
+            'From Idea to Prototype',
+            'Deploying Your Project',
+            'Building with Claude',
+            'Design Basics for Builders'
+        ];
+
+        // ========== FLIP CARD COMPONENT ==========
+        function FlipCard({ data, delay }) {
+            const [flipped, setFlipped] = useState(false);
+            const toggle = () => setFlipped(!flipped);
+
+            return (
+                <Reveal delay={delay}>
+                    <div
+                        className={'flip-card' + (flipped ? ' flipped' : '')}
+                        onClick={toggle}
+                        role="button"
+                        tabIndex={0}
+                        aria-label={data.front.title + '. Click to flip and see the real-world example.'}
+                        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } }}
+                    >
+                        <div className="flip-card-inner sparkle-container">
+                            <div className="flip-card-front">
+                                <h3 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--cream)', marginBottom: '1rem', lineHeight: 1.3 }}>
+                                    {data.front.title}
+                                </h3>
+                                <p style={{ color: 'rgba(245, 240, 232, 0.75)', fontSize: '0.95rem', lineHeight: 1.6 }}>
+                                    {data.front.subtitle}
+                                </p>
+                                <div className="flip-hint">tap to see the build</div>
+                            </div>
+                            <div className="flip-card-back">
+                                <div className="flow-step flow-frustration" style={{ marginBottom: '0.25rem' }}>
+                                    <div style={{ fontFamily: "'DM Mono', monospace", fontSize: '0.7rem', color: 'var(--terracotta)', fontWeight: 600, marginBottom: '0.25rem', letterSpacing: '0.05em' }}>
+                                        {data.back.frustration.label}
+                                    </div>
+                                    <div style={{ color: 'var(--cream)', fontSize: '0.85rem' }}>{data.back.frustration.text}</div>
+                                </div>
+                                <div className="flow-arrow">{'\u2193'}</div>
+                                <div className="flow-step flow-notice" style={{ marginBottom: '0.25rem' }}>
+                                    <div style={{ fontFamily: "'DM Mono', monospace", fontSize: '0.7rem', color: 'var(--bright-purple)', fontWeight: 600, marginBottom: '0.25rem', letterSpacing: '0.05em' }}>
+                                        {data.back.notice.label}
+                                    </div>
+                                    <div style={{ color: 'var(--cream)', fontSize: '0.85rem' }}>{data.back.notice.text}</div>
+                                </div>
+                                <div className="flow-arrow">{'\u2193'}</div>
+                                <div className="flow-step flow-build">
+                                    <div style={{ fontFamily: "'DM Mono', monospace", fontSize: '0.7rem', color: 'var(--warm-gold)', fontWeight: 600, marginBottom: '0.25rem', letterSpacing: '0.05em' }}>
+                                        {data.back.build.label}
+                                    </div>
+                                    <div style={{ color: 'var(--cream)', fontSize: '0.85rem' }}>{data.back.build.text}</div>
+                                </div>
+                                <div className="flip-hint" style={{ textAlign: 'center', marginTop: '0.75rem' }}>tap to flip back</div>
+                            </div>
+                        </div>
+                    </div>
+                </Reveal>
+            );
+        }
+
+        // ========== EVENT CARD COMPONENT ==========
+        function EventCard({ event, scrollTo }) {
+            const cardClass = event.featured ? 'event-card-featured' : 'event-card';
+
+            const handleCta = () => {
+                if (event.cta.action === 'zoom') {
+                    /* PLACEHOLDER: ZOOM_LINK_MARCH_8 */
+                    alert('Zoom link coming soon! Check back before March 8th.');
+                } else {
+                    scrollTo('enroll');
+                }
+            };
+
+            return (
+                <div className={cardClass}>
+                    {event.featured && <div className="flagship-badge">FLAGSHIP</div>}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
+                        <span className={'event-badge ' + event.badgeColor}>{event.badge}</span>
+                        <span className="event-tag">{event.tag}</span>
+                    </div>
+                    <h3 style={{ fontSize: event.featured ? '1.6rem' : '1.3rem', fontWeight: 700, color: 'var(--cream)', marginBottom: '0.75rem' }}>
+                        {event.title}
+                    </h3>
+                    <p style={{ color: 'rgba(245, 240, 232, 0.8)', marginBottom: '0.75rem', fontSize: '0.95rem', lineHeight: 1.6 }}>
+                        {event.description}
+                    </p>
+                    <p style={{ color: 'rgba(245, 240, 232, 0.65)', fontSize: '0.9rem', marginBottom: '1.25rem', lineHeight: 1.6, flex: 1 }}>
+                        {event.details}
+                    </p>
+                    <button onClick={handleCta} className={event.featured ? 'btn-primary' : 'btn-secondary'} style={{ width: '100%', textAlign: 'center' }}>
+                        {event.cta.text}
+                    </button>
+                </div>
+            );
+        }
+
+        // ========== MAIN APP ==========
+        function App() {
+            const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+            const [activeSection, setActiveSection] = useState('hero');
+
+            const sectionIds = ['hero', 'what-gwv', 'events', 'outcomes', 'adults', 'enroll'];
+
+            const scrollTo = useCallback((id) => {
+                setMobileMenuOpen(false);
+                document.body.style.overflow = '';
+                const el = document.getElementById(id);
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }, []);
+
+            const toggleMobileMenu = () => {
+                const next = !mobileMenuOpen;
+                setMobileMenuOpen(next);
+                document.body.style.overflow = next ? 'hidden' : '';
+            };
+
+            // Scroll spy
+            useEffect(() => {
+                const observer = new IntersectionObserver(
+                    (entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                setActiveSection(entry.target.id);
+                            }
+                        });
+                    },
+                    { threshold: 0.3 }
+                );
+                sectionIds.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) observer.observe(el);
+                });
+                return () => observer.disconnect();
+            }, []);
+
+            const navItems = [
+                { label: "What's GWV", id: 'what-gwv' },
+                { label: 'Events', id: 'events' },
+                { label: 'What You Get', id: 'outcomes' },
+                { label: 'For Adults', id: 'adults' },
+                { label: 'Enroll', id: 'enroll' }
+            ];
+
+            const floatingWords = [
+                { text: 'build', top: '12%', left: '8%', size: '1.1rem', delay: '0s', duration: '8s' },
+                { text: 'create', top: '25%', right: '12%', size: '0.9rem', delay: '2s', duration: '10s' },
+                { text: 'dream', bottom: '30%', left: '15%', size: '1rem', delay: '1s', duration: '9s' },
+                { text: 'solve', top: '60%', right: '20%', size: '0.85rem', delay: '3s', duration: '11s' },
+                { text: 'ship', bottom: '18%', right: '8%', size: '1.05rem', delay: '4s', duration: '7s' },
+                { text: 'courage', top: '40%', left: '5%', size: '0.8rem', delay: '1.5s', duration: '12s' },
+                { text: 'own it', bottom: '40%', right: '5%', size: '0.95rem', delay: '2.5s', duration: '9s' },
+                { text: 'think', top: '75%', left: '25%', size: '0.85rem', delay: '0.5s', duration: '10s' },
+            ];
+
+            return (
+                <React.Fragment>
+                    {/* ==================== NAV ==================== */}
+                    <nav className="nav-fixed" role="navigation" aria-label="Main navigation">
+                        <div className="container-max" style={{ padding: '0 1rem', height: '64px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }} onClick={() => scrollTo('hero')}>
+                                <img src="GWV.png" alt="Girls Who Vibe logo" style={{ height: '36px', width: '36px', borderRadius: '6px' }} />
+                                <span style={{ fontWeight: 700, fontSize: '1.1rem', color: 'var(--warm-gold)' }}>Girls Who Vibe</span>
+                            </div>
+
+                            <div className="desktop-nav" style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                                {navItems.map(item => (
+                                    <button key={item.id} onClick={() => scrollTo(item.id)} className={'nav-link' + (activeSection === item.id ? ' active' : '')}>
+                                        {item.label}
+                                    </button>
+                                ))}
+                                <button onClick={() => scrollTo('enroll')} className="btn-primary" style={{ padding: '10px 20px', fontSize: '0.85rem', marginLeft: '0.5rem' }}>
+                                    Join the Revolution
+                                </button>
+                            </div>
+
+                            <button className={'hamburger' + (mobileMenuOpen ? ' open' : '')} onClick={toggleMobileMenu} aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'} aria-expanded={mobileMenuOpen}>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </button>
+                        </div>
+                    </nav>
+
+                    {/* Mobile Menu */}
+                    <div className={'mobile-menu' + (mobileMenuOpen ? ' open' : '')} aria-hidden={!mobileMenuOpen}>
+                        {navItems.map(item => (
+                            <button key={item.id} className="mobile-nav-link" onClick={() => scrollTo(item.id)}>{item.label}</button>
+                        ))}
+                        <button onClick={() => scrollTo('enroll')} className="btn-primary" style={{ marginTop: '1rem', fontSize: '1.1rem' }}>
+                            Join the Revolution
+                        </button>
+                    </div>
+
+                    <main id="main-content" style={{ paddingTop: '64px' }}>
+
+                        {/* ==================== HERO ==================== */}
+                        <section id="hero" className="hero-bg" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: '6rem 1rem 4rem' }}>
+                            {/* Floating words */}
+                            {floatingWords.map((word, i) => {
+                                const posStyle = {};
+                                if (word.top) posStyle.top = word.top;
+                                if (word.bottom) posStyle.bottom = word.bottom;
+                                if (word.left) posStyle.left = word.left;
+                                if (word.right) posStyle.right = word.right;
+                                return (
+                                    <span
+                                        key={i}
+                                        className="floating-word"
+                                        style={{
+                                            ...posStyle,
+                                            fontSize: word.size,
+                                            animation: 'floatSlow ' + word.duration + ' ease-in-out ' + word.delay + ' infinite',
+                                        }}
+                                    >
+                                        {word.text}
+                                    </span>
+                                );
+                            })}
+
+                            <div className="container-max" style={{ position: 'relative', zIndex: 2, textAlign: 'center', maxWidth: '800px' }}>
+                                <div className="font-mono" style={{ fontSize: '0.85rem', color: 'var(--warm-gold)', letterSpacing: '0.15em', marginBottom: '1.5rem', fontWeight: 500 }}>
+                                    YOU'RE A PROBLEM SOLVER.
+                                </div>
+
+                                <h1 style={{ fontSize: 'clamp(2.2rem, 6vw, 4rem)', fontWeight: 800, color: 'var(--cream)', lineHeight: 1.15, marginBottom: '1.5rem' }}>
+                                    We're just giving you the tools.
+                                </h1>
+
+                                <p style={{ fontSize: 'clamp(1rem, 2.5vw, 1.25rem)', color: 'rgba(245, 240, 232, 0.8)', lineHeight: 1.7, marginBottom: '2.5rem', maxWidth: '640px', margin: '0 auto 2.5rem' }}>
+                                    GWV is where girls build what they wish existed. Not for grades. Not for approval. For impact and ownership.
+                                </p>
+
+                                <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '1.5rem' }}>
+                                    <button onClick={() => scrollTo('enroll')} className="btn-primary" style={{ fontSize: '1.1rem', padding: '16px 36px' }}>
+                                        Join the Build Revolution
+                                    </button>
+                                    <button onClick={() => scrollTo('events')} className="btn-secondary">
+                                        See What's Coming
+                                    </button>
+                                </div>
+
+                                <p className="font-mono" style={{ fontSize: '0.8rem', color: 'var(--light-purple)', letterSpacing: '0.03em' }}>
+                                    Curiosity and courage. That's all you need.
+                                </p>
+                            </div>
+
+                            {/* Scroll arrow */}
+                            <div className="scroll-arrow" onClick={() => scrollTo('what-gwv')} style={{ position: 'absolute', bottom: '2rem', left: '50%', transform: 'translateX(-50%)', cursor: 'pointer' }}>
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--light-purple)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </div>
+                        </section>
+
+                        <div className="section-divider"></div>
+
+                        {/* ==================== WHAT GWV IS (FLIP CARDS) ==================== */}
+                        <section id="what-gwv" style={{ padding: 'clamp(3rem, 6vw, 5rem) 1rem', background: 'var(--mid-purple)' }}>
+                            <div className="container-max">
+                                <Reveal>
+                                    <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+                                        <div className="font-mono" style={{ fontSize: '0.8rem', color: 'var(--warm-gold)', letterSpacing: '0.15em', marginBottom: '0.75rem' }}>WHAT WE DO</div>
+                                        <h2 style={{ fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', fontWeight: 700, color: 'var(--cream)', marginBottom: '0.75rem' }}>
+                                            This is how it works.
+                                        </h2>
+                                        <p style={{ color: 'rgba(245, 240, 232, 0.7)', maxWidth: '500px', margin: '0 auto' }}>
+                                            Click each card to see a real example of what you could build.
+                                        </p>
+                                    </div>
+                                </Reveal>
+
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
+                                    {flipCards.map((card, i) => (
+                                        <FlipCard key={i} data={card} delay={i + 1} />
+                                    ))}
+                                </div>
+                            </div>
+                        </section>
+
+                        <div className="section-divider"></div>
+
+                        {/* ==================== WHY NOW ==================== */}
+                        <section style={{ padding: 'clamp(3rem, 6vw, 5rem) 1rem', background: 'var(--deep-purple)' }}>
+                            <div className="container-max" style={{ maxWidth: '800px' }}>
+                                <Reveal>
+                                    <div className="font-mono" style={{ fontSize: '0.8rem', color: 'var(--warm-gold)', letterSpacing: '0.15em', marginBottom: '2rem' }}>WHY NOW</div>
+                                </Reveal>
+
+                                <Reveal delay={1}>
+                                    <div className="accent-block" style={{ marginBottom: '2rem' }}>
+                                        <h3 style={{ fontSize: '1.3rem', fontWeight: 700, color: 'var(--cream)', marginBottom: '0.5rem' }}>
+                                            Building is getting easier and faster.
+                                        </h3>
+                                        <p style={{ color: 'rgba(245, 240, 232, 0.7)', lineHeight: 1.7 }}>
+                                            AI tools mean you don't need to be a coder to create real software. The barriers that kept people out are falling. Right now.
+                                        </p>
+                                    </div>
+                                </Reveal>
+
+                                <Reveal delay={2}>
+                                    <div className="accent-block" style={{ marginBottom: '2rem' }}>
+                                        <h3 style={{ fontSize: '1.3rem', fontWeight: 700, color: 'var(--cream)', marginBottom: '0.5rem' }}>
+                                            The people who design solutions will shape what comes next.
+                                        </h3>
+                                        <p style={{ color: 'rgba(245, 240, 232, 0.7)', lineHeight: 1.7 }}>
+                                            That should include you. Your perspective. Your experience. Your ideas about what needs to exist.
+                                        </p>
+                                    </div>
+                                </Reveal>
+
+                                <Reveal delay={3}>
+                                    <div className="accent-block" style={{ marginBottom: '2.5rem' }}>
+                                        <h3 style={{ fontSize: '1.3rem', fontWeight: 700, color: 'var(--cream)', marginBottom: '0.5rem' }}>
+                                            GWV exists so girls are not left out of what's being built.
+                                        </h3>
+                                        <p style={{ color: 'rgba(245, 240, 232, 0.7)', lineHeight: 1.7 }}>
+                                            Not as users. Not as followers. As builders. As owners. As the ones who decide what gets made.
+                                        </p>
+                                    </div>
+                                </Reveal>
+
+                                <Reveal type="scale">
+                                    <div style={{ background: 'rgba(196, 77, 63, 0.1)', border: '1px solid rgba(196, 77, 63, 0.3)', borderRadius: '12px', padding: '2rem', textAlign: 'center' }}>
+                                        <p style={{ fontSize: '1.2rem', fontWeight: 600, color: 'var(--cream)', lineHeight: 1.6 }}>
+                                            The tools are here. The moment is now.<br/>
+                                            The only question is whether you're building or watching.
+                                        </p>
+                                    </div>
+                                </Reveal>
+                            </div>
+                        </section>
+
+                        <div className="section-divider"></div>
+
+                        {/* ==================== EVENTS ==================== */}
+                        <section id="events" style={{ padding: 'clamp(3rem, 6vw, 5rem) 1rem', background: 'var(--mid-purple)' }}>
+                            <div className="container-max">
+                                <Reveal>
+                                    <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+                                        <div className="font-mono" style={{ fontSize: '0.8rem', color: 'var(--warm-gold)', letterSpacing: '0.15em', marginBottom: '0.75rem' }}>UPCOMING</div>
+                                        <h2 style={{ fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', fontWeight: 700, color: 'var(--cream)', marginBottom: '0.75rem' }}>
+                                            What's Coming Up
+                                        </h2>
+                                        <p style={{ color: 'rgba(245, 240, 232, 0.7)', maxWidth: '500px', margin: '0 auto' }}>
+                                            Hackathons, free build days, and guided camps. Pick your entry point.
+                                        </p>
+                                    </div>
+                                </Reveal>
+
+                                {/* Non-featured events side by side */}
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
+                                    {events.filter(e => !e.featured).map((event, i) => (
+                                        <Reveal key={event.id} delay={i + 1}>
+                                            <EventCard event={event} scrollTo={scrollTo} />
+                                        </Reveal>
+                                    ))}
+                                </div>
+
+                                {/* Featured camp cards */}
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '2rem' }}>
+                                    {events.filter(e => e.featured).map((event, i) => (
+                                        <Reveal key={event.id} delay={i + 1} type="scale">
+                                            <EventCard event={event} scrollTo={scrollTo} />
+                                        </Reveal>
+                                    ))}
+                                </div>
+                            </div>
+                        </section>
+
+                        <div className="section-divider"></div>
+
+                        {/* ==================== WHAT YOU LEAVE WITH ==================== */}
+                        <section id="outcomes" style={{ padding: 'clamp(3rem, 6vw, 5rem) 1rem', background: 'var(--deep-purple)' }}>
+                            <div className="container-max" style={{ maxWidth: '900px' }}>
+                                <Reveal>
+                                    <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+                                        <div className="font-mono" style={{ fontSize: '0.8rem', color: 'var(--warm-gold)', letterSpacing: '0.15em', marginBottom: '0.75rem' }}>THE RESULT</div>
+                                        <h2 style={{ fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', fontWeight: 700, color: 'var(--cream)', marginBottom: '0.75rem' }}>
+                                            What You Walk Away With
+                                        </h2>
+                                        <p style={{ color: 'rgba(245, 240, 232, 0.7)' }}>
+                                            This isn't theory. This is yours.
+                                        </p>
+                                    </div>
+                                </Reveal>
+
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
+                                    {outcomes.map((item, i) => (
+                                        <Reveal key={i} delay={i + 1}>
+                                            <div className="outcome-block">
+                                                <div className="outcome-number">{item.num}</div>
+                                                <h3 style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--cream)', marginBottom: '0.5rem' }}>
+                                                    {item.title}
+                                                </h3>
+                                                <p style={{ color: 'rgba(245, 240, 232, 0.7)', fontSize: '0.95rem', lineHeight: 1.6 }}>
+                                                    {item.desc}
+                                                </p>
+                                            </div>
+                                        </Reveal>
+                                    ))}
+                                </div>
+                            </div>
+                        </section>
+
+                        <div className="section-divider"></div>
+
+                        {/* ==================== NOT A TECH GIRL ==================== */}
+                        <section style={{ padding: 'clamp(4rem, 8vw, 7rem) 1rem', background: 'linear-gradient(135deg, var(--mid-purple) 0%, var(--deep-purple) 100%)', textAlign: 'center' }}>
+                            <div className="container-max" style={{ maxWidth: '650px' }}>
+                                <Reveal type="scale">
+                                    <h2 style={{ fontSize: 'clamp(1.8rem, 5vw, 3rem)', fontWeight: 800, color: 'var(--cream)', lineHeight: 1.2, marginBottom: '1.5rem' }}>
+                                        You don't need to be{' '}
+                                        <span className="shimmer-underline" style={{ color: 'var(--warm-gold)' }}>
+                                            "a tech girl."
+                                        </span>
+                                    </h2>
+                                </Reveal>
+                                <Reveal delay={1}>
+                                    <p style={{ fontSize: 'clamp(1rem, 2.5vw, 1.15rem)', color: 'rgba(245, 240, 232, 0.8)', lineHeight: 1.8, marginBottom: '2.5rem' }}>
+                                        You need curiosity and courage. That's it. The tools handle the technical part. You bring the vision, the frustration, the idea that won't let you sleep. We'll show you how to build it.
+                                    </p>
+                                </Reveal>
+                                <Reveal delay={2}>
+                                    <button onClick={() => scrollTo('enroll')} className="btn-primary" style={{ fontSize: '1.1rem', padding: '16px 40px' }}>
+                                        Start Building
+                                    </button>
+                                </Reveal>
+                            </div>
+                        </section>
+
+                        <div className="section-divider"></div>
+
+                        {/* ==================== FOR ADULTS ==================== */}
+                        <section id="adults" style={{ padding: 'clamp(3rem, 6vw, 5rem) 1rem', background: 'var(--deep-purple)' }}>
+                            <div className="container-max">
+                                <Reveal>
+                                    <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+                                        <div className="font-mono" style={{ fontSize: '0.8rem', color: 'var(--warm-gold)', letterSpacing: '0.15em', marginBottom: '0.75rem' }}>FOR THE ADULTS</div>
+                                        <h2 style={{ fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', fontWeight: 700, color: 'var(--cream)', marginBottom: '0.75rem' }}>
+                                            For Trusted Adults and Allies
+                                        </h2>
+                                        <p style={{ color: 'rgba(245, 240, 232, 0.7)', maxWidth: '550px', margin: '0 auto' }}>
+                                            Parents, mentors, educators, counselors. Here's what you need to know.
+                                        </p>
+                                    </div>
+                                </Reveal>
+
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem', marginBottom: '2.5rem' }}>
+                                    <Reveal delay={1}>
+                                        <div className="glass-card" style={{ height: '100%' }}>
+                                            <h3 style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--warm-gold)', marginBottom: '1rem' }}>What GWV Is</h3>
+                                            <ul style={{ listStyle: 'none', padding: 0 }}>
+                                                {[
+                                                    'A guided build space (not a coding bootcamp)',
+                                                    'Girls identify real problems and build real solutions',
+                                                    'AI-enhanced tools mean no prior experience needed',
+                                                    'Strengthens agency, collaboration, and problem solving'
+                                                ].map((item, i) => (
+                                                    <li key={i} style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.75rem', color: 'rgba(245, 240, 232, 0.8)', fontSize: '0.9rem', lineHeight: 1.6 }}>
+                                                        <span style={{ color: 'var(--warm-gold)', flexShrink: 0 }}>{'\u25C6'}</span>
+                                                        <span>{item}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    </Reveal>
+
+                                    <Reveal delay={2}>
+                                        <div className="glass-card" style={{ height: '100%' }}>
+                                            <h3 style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--warm-gold)', marginBottom: '1rem' }}>The Inner Work</h3>
+                                            <ul style={{ listStyle: 'none', padding: 0 }}>
+                                                {[
+                                                    'AI-enhanced mindfulness pathways',
+                                                    'Forgiveness and attitudinal healing practices',
+                                                    'Social-emotional learning woven into every session',
+                                                    'A practice for processing and moving forward, not therapy'
+                                                ].map((item, i) => (
+                                                    <li key={i} style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.75rem', color: 'rgba(245, 240, 232, 0.8)', fontSize: '0.9rem', lineHeight: 1.6 }}>
+                                                        <span style={{ color: 'var(--bright-purple)', flexShrink: 0 }}>{'\u25C6'}</span>
+                                                        <span>{item}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    </Reveal>
+
+                                    <Reveal delay={3}>
+                                        <div className="glass-card" style={{ height: '100%' }}>
+                                            <h3 style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--warm-gold)', marginBottom: '1rem' }}>What It's NOT</h3>
+                                            <ul style={{ listStyle: 'none', padding: 0 }}>
+                                                {[
+                                                    'No KPIs or productivity metrics',
+                                                    'Not about grades or college applications',
+                                                    'Not about turning kids into engineers',
+                                                    "It's about agency, ownership, and purpose"
+                                                ].map((item, i) => (
+                                                    <li key={i} style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.75rem', color: 'rgba(245, 240, 232, 0.8)', fontSize: '0.9rem', lineHeight: 1.6 }}>
+                                                        <span style={{ color: 'var(--terracotta)', flexShrink: 0 }}>{'\u25C6'}</span>
+                                                        <span>{item}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    </Reveal>
+                                </div>
+
+                                <Reveal type="scale">
+                                    <div style={{ background: 'rgba(212, 168, 83, 0.06)', border: '1px solid rgba(212, 168, 83, 0.25)', borderRadius: '12px', padding: '2rem', textAlign: 'center' }}>
+                                        <p style={{ fontSize: '1.05rem', color: 'var(--cream)', marginBottom: '1.5rem', lineHeight: 1.7 }}>
+                                            How can you help? Refer a girl who needs this. Sponsor a seat. Or just share the link.
+                                        </p>
+                                        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+                                            <button onClick={() => scrollTo('enroll')} className="btn-primary">Refer Someone</button>
+                                            <a href="mailto:admin@practicecenter.org" className="btn-secondary">Contact Us</a>
+                                        </div>
+                                    </div>
+                                </Reveal>
+                            </div>
+                        </section>
+
+                        <div className="section-divider"></div>
+
+                        {/* ==================== RESOURCES + TUTORIALS ==================== */}
+                        <section style={{ padding: 'clamp(3rem, 6vw, 5rem) 1rem', background: 'var(--mid-purple)' }}>
+                            <div className="container-max">
+                                <Reveal>
+                                    <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+                                        <div className="font-mono" style={{ fontSize: '0.8rem', color: 'var(--warm-gold)', letterSpacing: '0.15em', marginBottom: '0.75rem' }}>RESOURCES</div>
+                                        <h2 style={{ fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', fontWeight: 700, color: 'var(--cream)', marginBottom: '0.75rem' }}>
+                                            Your Building Toolkit
+                                        </h2>
+                                        <p style={{ color: 'rgba(245, 240, 232, 0.7)', maxWidth: '500px', margin: '0 auto' }}>
+                                            Free tools and resources to get you started. More coming soon.
+                                        </p>
+                                    </div>
+                                </Reveal>
+
+                                {/* Resource links */}
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem', marginBottom: '3rem' }}>
+                                    <Reveal delay={1}>
+                                        <a href="https://lovable.dev/invite/JTHKTO5" target="_blank" rel="noopener noreferrer" className="glass-card" style={{ display: 'block', textDecoration: 'none', textAlign: 'center' }}>
+                                            <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--warm-gold)', marginBottom: '0.5rem' }}>Lovable</h3>
+                                            <p style={{ color: 'rgba(245, 240, 232, 0.7)', fontSize: '0.9rem' }}>Get a free account to start building. 5 credits to play with.</p>
+                                        </a>
+                                    </Reveal>
+                                    <Reveal delay={2}>
+                                        <div className="glass-card" style={{ textAlign: 'center' }}>
+                                            <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--warm-gold)', marginBottom: '0.5rem' }}>Claude AI</h3>
+                                            <p style={{ color: 'rgba(245, 240, 232, 0.7)', fontSize: '0.9rem' }}>
+                                                Your AI thinking partner for building.
+                                            </p>
+                                            {/* PLACEHOLDER: CLAUDE_SHARE_CODE */}
+                                            <span className="font-mono" style={{ fontSize: '0.75rem', color: 'var(--light-purple)', display: 'block', marginTop: '0.5rem' }}>Share code coming soon</span>
+                                        </div>
+                                    </Reveal>
+                                </div>
+
+                                {/* Tutorial placeholder */}
+                                <Reveal>
+                                    <div style={{ marginBottom: '1.5rem' }}>
+                                        <h3 style={{ fontSize: '1.3rem', fontWeight: 700, color: 'var(--cream)', marginBottom: '0.5rem' }}>
+                                            Learn On Your Own
+                                        </h3>
+                                        <p style={{ color: 'rgba(245, 240, 232, 0.65)', fontSize: '0.95rem', marginBottom: '1.5rem' }}>
+                                            Step-by-step guides so you can learn and build at your own pace. No gatekeeping.
+                                        </p>
+                                    </div>
+                                </Reveal>
+
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+                                    {/* PLACEHOLDER: TUTORIAL_CONTENT */}
+                                    {tutorialPlaceholders.map((title, i) => (
+                                        <Reveal key={i} delay={Math.min(i + 1, 4)}>
+                                            <div className="tutorial-placeholder">
+                                                <div style={{ fontWeight: 600, marginBottom: '0.5rem', color: 'var(--light-purple)' }}>{title}</div>
+                                                <span className="font-mono" style={{ fontSize: '0.7rem', opacity: 0.6 }}>COMING SOON</span>
+                                            </div>
+                                        </Reveal>
+                                    ))}
+                                </div>
+                            </div>
+                        </section>
+
+                        <div className="section-divider"></div>
+
+                        {/* ==================== ENROLLMENT + PAYMENT ==================== */}
+                        <section id="enroll" style={{ padding: 'clamp(3rem, 6vw, 5rem) 1rem', background: 'var(--deep-purple)' }}>
+                            <div className="container-max" style={{ maxWidth: '800px' }}>
+                                <Reveal>
+                                    <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+                                        <div className="font-mono" style={{ fontSize: '0.8rem', color: 'var(--warm-gold)', letterSpacing: '0.15em', marginBottom: '0.75rem' }}>LET'S GO</div>
+                                        <h2 style={{ fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', fontWeight: 700, color: 'var(--cream)', marginBottom: '0.75rem' }}>
+                                            Ready? Let's Go.
+                                        </h2>
+                                        <p style={{ color: 'rgba(245, 240, 232, 0.7)' }}>
+                                            Fill out the form below. It takes about 5 minutes.
+                                        </p>
+                                    </div>
+                                </Reveal>
+
+                                <Reveal type="scale">
+                                    {/* Google Form Embed Placeholder */}
+                                    <div style={{ background: 'var(--mid-purple)', borderRadius: '12px', border: '1px solid rgba(123, 79, 158, 0.3)', padding: '2rem', marginBottom: '2rem', textAlign: 'center' }}>
+                                        {/* PLACEHOLDER: GOOGLE_FORM_EMBED_URL - Replace the div below with your iframe */}
+                                        <div style={{ background: 'rgba(123, 79, 158, 0.1)', borderRadius: '8px', padding: '3rem 1.5rem', border: '2px dashed rgba(123, 79, 158, 0.3)' }}>
+                                            <p style={{ color: 'var(--light-purple)', fontWeight: 600, marginBottom: '0.5rem' }}>Enrollment Form Goes Here</p>
+                                            <p style={{ color: 'rgba(245, 240, 232, 0.5)', fontSize: '0.85rem', marginBottom: '1rem' }}>
+                                                Replace this placeholder with your Google Form embed URL
+                                            </p>
+                                            <code className="font-mono" style={{ fontSize: '0.75rem', color: 'var(--light-purple)', background: 'rgba(0,0,0,0.2)', padding: '0.5rem 1rem', borderRadius: '4px', display: 'inline-block' }}>
+                                                PLACEHOLDER: GOOGLE_FORM_EMBED_URL
+                                            </code>
+                                        </div>
+                                    </div>
+                                </Reveal>
+
+                                <Reveal delay={1}>
+                                    {/* Stripe Payment */}
+                                    <div style={{ background: 'linear-gradient(135deg, rgba(212, 168, 83, 0.08), rgba(45, 27, 78, 0.4))', border: '1px solid rgba(212, 168, 83, 0.3)', borderRadius: '12px', padding: '2rem', textAlign: 'center' }}>
+                                        <h3 style={{ fontSize: '1.3rem', fontWeight: 700, color: 'var(--cream)', marginBottom: '0.75rem' }}>Registration Fee</h3>
+                                        <p style={{ color: 'rgba(245, 240, 232, 0.8)', marginBottom: '0.5rem', lineHeight: 1.6 }}>
+                                            Sliding scale: $1 to $5,000. Pay what makes sense for your family. We mean it.
+                                        </p>
+                                        <p style={{ color: 'rgba(245, 240, 232, 0.55)', fontSize: '0.85rem', marginBottom: '1.5rem' }}>
+                                            You'll be redirected to Stripe's secure checkout where you choose your amount.
+                                        </p>
+                                        {/* PLACEHOLDER: STRIPE_PAYMENT_LINK - Replace # with your Stripe Payment Link URL */}
+                                        <a href="#" className="btn-primary" target="_blank" rel="noopener noreferrer" style={{ fontSize: '1.05rem', padding: '14px 36px' }}>
+                                            Pay Registration Fee
+                                        </a>
+                                        <p className="font-mono" style={{ fontSize: '0.7rem', color: 'var(--light-purple)', marginTop: '1rem' }}>
+                                            Secure payment powered by Stripe
+                                        </p>
+                                    </div>
+                                </Reveal>
+                            </div>
+                        </section>
+
+                        <div className="section-divider"></div>
+
+                        {/* ==================== FOOTER ==================== */}
+                        <footer style={{ padding: 'clamp(2.5rem, 5vw, 4rem) 1rem 2rem', background: 'var(--near-black)' }}>
+                            <div className="container-max">
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '2rem', marginBottom: '2.5rem' }}>
+                                    {/* Brand */}
+                                    <div>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
+                                            <img src="GWV.png" alt="Girls Who Vibe logo" style={{ height: '32px', width: '32px', borderRadius: '4px' }} />
+                                            <span style={{ fontWeight: 700, color: 'var(--warm-gold)', fontSize: '1rem' }}>Girls Who Vibe</span>
+                                        </div>
+                                        <p style={{ color: 'rgba(245, 240, 232, 0.5)', fontSize: '0.85rem', lineHeight: 1.6 }}>
+                                            Turning real issues into real tools, with AI, sisterhood, and purpose.
+                                        </p>
+                                    </div>
+
+                                    {/* Quick Links */}
+                                    <div>
+                                        <h4 style={{ color: 'var(--cream)', fontWeight: 600, marginBottom: '0.75rem', fontSize: '0.9rem' }}>Quick Links</h4>
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                            {navItems.map(item => (
+                                                <button key={item.id} onClick={() => scrollTo(item.id)} style={{ color: 'rgba(245, 240, 232, 0.6)', background: 'none', border: 'none', padding: 0, textAlign: 'left', fontSize: '0.85rem', cursor: 'pointer', transition: 'color 0.3s' }}
+                                                   onMouseEnter={e => e.target.style.color = 'var(--warm-gold)'}
+                                                   onMouseLeave={e => e.target.style.color = 'rgba(245, 240, 232, 0.6)'}>
+                                                    {item.label}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    {/* For Adults */}
+                                    <div>
+                                        <h4 style={{ color: 'var(--cream)', fontWeight: 600, marginBottom: '0.75rem', fontSize: '0.9rem' }}>For Adults</h4>
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                            <button onClick={() => scrollTo('adults')} style={{ color: 'rgba(245, 240, 232, 0.6)', background: 'none', border: 'none', padding: 0, textAlign: 'left', fontSize: '0.85rem', cursor: 'pointer', transition: 'color 0.3s' }}
+                                               onMouseEnter={e => e.target.style.color = 'var(--warm-gold)'}
+                                               onMouseLeave={e => e.target.style.color = 'rgba(245, 240, 232, 0.6)'}>
+                                                Learn More
+                                            </button>
+                                            <button onClick={() => scrollTo('enroll')} style={{ color: 'rgba(245, 240, 232, 0.6)', background: 'none', border: 'none', padding: 0, textAlign: 'left', fontSize: '0.85rem', cursor: 'pointer', transition: 'color 0.3s' }}
+                                               onMouseEnter={e => e.target.style.color = 'var(--warm-gold)'}
+                                               onMouseLeave={e => e.target.style.color = 'rgba(245, 240, 232, 0.6)'}>
+                                                Refer a Girl
+                                            </button>
+                                            <a href="mailto:admin@practicecenter.org" style={{ color: 'rgba(245, 240, 232, 0.6)', textDecoration: 'none', fontSize: '0.85rem', transition: 'color 0.3s' }}
+                                               onMouseEnter={e => e.target.style.color = 'var(--warm-gold)'}
+                                               onMouseLeave={e => e.target.style.color = 'rgba(245, 240, 232, 0.6)'}>
+                                                Contact Us
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    {/* Connect */}
+                                    <div>
+                                        <h4 style={{ color: 'var(--cream)', fontWeight: 600, marginBottom: '0.75rem', fontSize: '0.9rem' }}>Connect</h4>
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                            <a href="mailto:admin@practicecenter.org" style={{ color: 'rgba(245, 240, 232, 0.6)', textDecoration: 'none', fontSize: '0.85rem', transition: 'color 0.3s' }}
+                                               onMouseEnter={e => e.target.style.color = 'var(--warm-gold)'}
+                                               onMouseLeave={e => e.target.style.color = 'rgba(245, 240, 232, 0.6)'}>
+                                                admin@practicecenter.org
+                                            </a>
+                                            {/* PLACEHOLDER: SOCIAL_MEDIA_LINKS */}
+                                            <span style={{ color: 'rgba(245, 240, 232, 0.35)', fontSize: '0.8rem', fontStyle: 'italic' }}>Social links coming soon</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Bottom bar */}
+                                <div style={{ borderTop: '1px solid rgba(123, 79, 158, 0.2)', paddingTop: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
+                                    <p style={{ color: 'rgba(245, 240, 232, 0.4)', fontSize: '0.8rem' }}>
+                                        Powered by The Practice Center + AIDEDEQ
+                                    </p>
+                                    <p style={{ color: 'rgba(245, 240, 232, 0.3)', fontSize: '0.75rem' }}>
+                                        &copy; 2026 Girls Who Vibe. All rights reserved.
+                                    </p>
+                                </div>
+                            </div>
+                        </footer>
+
+                    </main>
+                </React.Fragment>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(React.createElement(App));
+    </script>
+</body>
+</html>
