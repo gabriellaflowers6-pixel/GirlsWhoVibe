@@ -68,8 +68,8 @@
         }
 
         @keyframes floatSlow {
-            0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.12; }
-            50% { transform: translateY(-25px) rotate(3deg); opacity: 0.22; }
+            0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.35; }
+            50% { transform: translateY(-25px) rotate(3deg); opacity: 0.55; }
         }
 
         @keyframes shimmer {
@@ -224,6 +224,11 @@
             .desktop-nav { display: none !important; }
         }
 
+        @media (max-width: 640px) {
+            .grid-2col { grid-template-columns: 1fr !important; }
+            .grid-3col { grid-template-columns: 1fr !important; }
+        }
+
         /* ========== BUTTONS ========== */
         .btn-primary {
             background: linear-gradient(135deg, var(--warm-gold), var(--bright-gold));
@@ -277,9 +282,11 @@
 
         /* ========== HERO ========== */
         .hero-bg {
-            background: linear-gradient(135deg, #1a0a2e 0%, #2d1b4e 30%, #3a1f5e 50%, #2d1b4e 70%, #1a0a2e 100%);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
+            background: radial-gradient(ellipse at center, rgba(82, 28, 154, 0.78) 0%, rgba(48, 18, 86, 0.84) 60%, rgba(20, 8, 38, 0.90) 100%),
+                        url('hero-bg.png');
+            background-size: cover;
+            background-position: center bottom;
+            background-repeat: no-repeat;
             position: relative;
             overflow: hidden;
         }
@@ -303,6 +310,65 @@
             height: 2px;
             background: linear-gradient(90deg, transparent, var(--warm-gold), var(--silver), var(--warm-gold), transparent);
             opacity: 0.4;
+        }
+
+        /* ========== SPEECH BUBBLES ========== */
+        .speech-bubble-container {
+            display: flex;
+            gap: 2rem;
+            max-width: 700px;
+            margin: 0 auto;
+            align-items: flex-start;
+        }
+        @media (max-width: 640px) {
+            .speech-bubble-container { flex-direction: column; gap: 1.5rem; }
+        }
+        .speech-bubble-wrap {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .speech-bubble {
+            position: relative;
+            background: rgba(123, 79, 158, 0.18);
+            border: 1px solid rgba(123, 79, 158, 0.35);
+            border-radius: 16px;
+            padding: 1.25rem 1.5rem;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--cream);
+            font-style: italic;
+        }
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid rgba(123, 79, 158, 0.35);
+        }
+        .speech-girl {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        .speech-girl-1 {
+            background: linear-gradient(135deg, rgba(212, 114, 158, 0.25), rgba(123, 79, 158, 0.3));
+            border: 1.5px solid rgba(212, 114, 158, 0.4);
+        }
+        .speech-girl-2 {
+            background: linear-gradient(135deg, rgba(212, 168, 83, 0.2), rgba(123, 79, 158, 0.3));
+            border: 1.5px solid rgba(212, 168, 83, 0.4);
         }
 
         /* ========== FLIP CARDS ========== */
@@ -361,10 +427,12 @@
         }
 
         .flip-hint {
-            font-size: 0.75rem;
-            color: var(--light-purple);
+            font-size: 0.8rem;
+            color: var(--warm-gold);
             margin-top: 1rem;
             font-family: 'DM Mono', monospace;
+            font-weight: 600;
+            letter-spacing: 0.03em;
         }
 
         .flow-arrow {
@@ -642,35 +710,35 @@
         // ========== DATA ==========
         const flipCards = [
             {
-                front: { title: 'Turn frustration into a build', subtitle: "See a problem? Don't just vent about it. Build something that actually fixes it." },
+                front: { title: 'See something broken? Build the fix.', subtitle: "See something that could be better at school? In your community? Don't just wish it were different. Build an app that changes it." },
                 back: {
-                    frustration: { label: 'THE FRUSTRATION', text: '"Nobody gets me." Feeling unseen by parents and adults.' },
-                    notice: { label: 'NOTICE IT', text: 'What do I actually need them to understand?' },
-                    build: { label: 'BUILD IT', text: 'A conversation bridge tool with structured prompts that help teens and parents actually hear each other.' }
+                    frustration: { label: 'THE IDEA', text: '"I wish my school had a better way to find tutors."' },
+                    notice: { label: 'DESIGN IT', text: 'What would a peer tutoring app actually need? Who would use it?' },
+                    build: { label: 'BUILD IT', text: 'A peer tutoring matcher that connects students by subject, schedule, and learning style.' }
                 }
             },
             {
-                front: { title: 'Turn values into something real', subtitle: 'Care about something deeply? Turn that into a tool that helps people like you.' },
+                front: { title: 'Wish organizing your life was easier?', subtitle: 'Create a tool that works the way your brain works. Your planner, your rules, your design.' },
                 back: {
-                    frustration: { label: 'THE FRUSTRATION', text: '"I\'m raising myself." Parentification, adult responsibilities too young.' },
-                    notice: { label: 'NOTICE IT', text: 'I deserve support too. What would help ME?' },
-                    build: { label: 'BUILD IT', text: 'A boundary and self-care tracker. See the imbalance. Plan the conversation.' }
+                    frustration: { label: 'THE IDEA', text: '"None of these apps actually help me stay organized."' },
+                    notice: { label: 'DESIGN IT', text: 'What do I actually need to track? What would make it easy?' },
+                    build: { label: 'BUILD IT', text: 'A custom planner app with reminders, goals, and a dashboard that actually makes sense to you.' }
                 }
             },
             {
-                front: { title: 'Build with friends and allies', subtitle: 'Your crew. Your ideas. Real collaboration on something that matters.' },
+                front: { title: 'Care about an issue? Design a solution.', subtitle: "Climate, mental health, equity, whatever matters to you, technology can help you make an impact." },
                 back: {
-                    frustration: { label: 'THE FRUSTRATION', text: '"My school has nothing for me." No tutors, no resources, the system failed you.' },
-                    notice: { label: 'NOTICE IT', text: "I'm not broken. What do I actually need?" },
-                    build: { label: 'BUILD IT', text: 'A peer tutoring matcher or AI study buddy that explains things YOUR way.' }
+                    frustration: { label: 'THE IDEA', text: '"I care about this issue but I feel like I can\'t do anything."' },
+                    notice: { label: 'DESIGN IT', text: 'What would actually help people in my community right now?' },
+                    build: { label: 'BUILD IT', text: 'A resource finder, awareness campaign site, or community action tool, designed by you, for your community.' }
                 }
             },
             {
-                front: { title: 'Think like a maker, not a consumer', subtitle: 'Stop scrolling. Start creating. That shift changes everything.' },
+                front: { title: 'Stop scrolling. Start creating.', subtitle: "Technology isn't just something you consume. It's something you can create. That shift changes everything." },
                 back: {
-                    frustration: { label: 'THE FRUSTRATION', text: '"I feel alone and nothing matters." Loneliness, disconnection.' },
-                    notice: { label: 'NOTICE IT', text: 'Isolation lies to you. Connection is a choice.' },
-                    build: { label: 'BUILD IT', text: 'A micro-community app. Small groups, weekly check-ins, real questions, no performative nonsense.' }
+                    frustration: { label: 'THE IDEA', text: '"I spend all day on apps but I\'ve never made one."' },
+                    notice: { label: 'DESIGN IT', text: 'What kind of app, game, or tool would I be proud to show people?' },
+                    build: { label: 'BUILD IT', text: 'Your first real project: an app, a game, a website. Something with your name on it that you built from scratch.' }
                 }
             }
         ];
@@ -684,7 +752,7 @@
                 description: 'Weekend build sprint with women builders. Bring an idea, leave with a prototype.',
                 details: 'AIDEDEQ is entering! We welcome partners, participants, and supporters.',
                 tag: '48-HOUR SPRINT',
-                cta: { text: 'Learn More', action: 'enroll' },
+                cta: { text: 'Join the Community', action: 'link', url: 'https://www.skool.com/hackathon' },
                 featured: false
             },
             {
@@ -693,9 +761,9 @@
                 badgeColor: 'badge-terracotta',
                 title: "International Women's Day Build Event",
                 description: 'Lovable is free for 24 hours. Powered by Anthropic.',
-                details: 'AIDEDEQ will be online 3pm-5pm to build together, answer questions, and troubleshoot. Already have your free Lovable credits? Just click the Zoom link and jump in.',
+                details: 'AIDEDEQ will be online to build together, answer questions, and troubleshoot. Already have your free Lovable credits? Just click the Zoom link and jump in.',
                 tag: 'FREE BUILD DAY',
-                cta: { text: 'Join the Zoom', action: 'zoom' },
+                cta: { text: 'Join the Zoom', action: 'link', url: 'https://us02web.zoom.us/j/82187614892#success' },
                 featured: false
             },
             {
@@ -706,7 +774,7 @@
                 description: 'Your idea. Your prototype. Your confidence. A full week of guided building.',
                 details: '1pm - 5pm daily on Zoom',
                 tag: 'WEEK-LONG CAMP',
-                cta: { text: 'Enroll Now', action: 'enroll' },
+                cta: { text: 'Enroll Now', action: 'register' },
                 featured: true
             },
             {
@@ -717,16 +785,16 @@
                 description: 'Same magic, different week. Pick the schedule that fits your life.',
                 details: '10am - 2pm daily on Zoom',
                 tag: 'WEEK-LONG CAMP',
-                cta: { text: 'Enroll Now', action: 'enroll' },
+                cta: { text: 'Enroll Now', action: 'register' },
                 featured: true
             }
         ];
 
         const outcomes = [
-            { num: '01', title: 'A tool or product YOU built', desc: 'Not a class project. Something real that solves a real problem you care about.' },
-            { num: '02', title: 'A new way of thinking', desc: "Frustration, then clarity, then curiosity, then create, then share, then ship. That's the cycle." },
-            { num: '03', title: 'New people who get it', desc: 'Friends who build. Who care. Who might change the world alongside you.' },
-            { num: '04', title: 'Confidence that you can contribute', desc: "You're not just watching the future happen. You're making it." }
+            { num: '01', icon: '💡', title: 'Think like an innovator', desc: 'Learn to look at the world differently, spotting problems, asking better questions, and imagining solutions that don\'t exist yet.' },
+            { num: '02', icon: '🛠️', title: 'Build with confidence', desc: 'Walk away with a real project: an app, a website, a tool. One that you designed and built yourself, even if you started with zero experience.' },
+            { num: '03', icon: '🌍', title: 'Use tech to solve real problems', desc: 'Technology becomes your tool, not just your entertainment. You\'ll know how to turn ideas into things people can actually use.' },
+            { num: '04', icon: '🚀', title: 'Lead the future of technology', desc: 'When girls learn to build, they don\'t just follow trends. They create them. You\'ll leave ready to lead, not just participate.' }
         ];
 
         const tutorialPlaceholders = [
@@ -761,11 +829,11 @@
                                 <p style={{ color: 'rgba(245, 240, 232, 0.75)', fontSize: '0.95rem', lineHeight: 1.6 }}>
                                     {data.front.subtitle}
                                 </p>
-                                <div className="flip-hint">tap to see the build</div>
+                                <div className="flip-hint">tap here →</div>
                             </div>
                             <div className="flip-card-back">
-                                <div className="flow-step flow-frustration" style={{ marginBottom: '0.25rem' }}>
-                                    <div style={{ fontFamily: "'DM Mono', monospace", fontSize: '0.7rem', color: 'var(--terracotta)', fontWeight: 600, marginBottom: '0.25rem', letterSpacing: '0.05em' }}>
+                                <div className="flow-step flow-notice" style={{ marginBottom: '0.25rem' }}>
+                                    <div style={{ fontFamily: "'DM Mono', monospace", fontSize: '0.7rem', color: 'var(--bright-purple)', fontWeight: 600, marginBottom: '0.25rem', letterSpacing: '0.05em' }}>
                                         {data.back.frustration.label}
                                     </div>
                                     <div style={{ color: 'var(--cream)', fontSize: '0.85rem' }}>{data.back.frustration.text}</div>
@@ -784,7 +852,7 @@
                                     </div>
                                     <div style={{ color: 'var(--cream)', fontSize: '0.85rem' }}>{data.back.build.text}</div>
                                 </div>
-                                <div className="flip-hint" style={{ textAlign: 'center', marginTop: '0.75rem' }}>tap to flip back</div>
+                                <div className="flip-hint" style={{ textAlign: 'center', marginTop: '0.75rem' }}>tap here to flip back →</div>
                             </div>
                         </div>
                     </div>
@@ -797,11 +865,14 @@
             const cardClass = event.featured ? 'event-card-featured' : 'event-card';
 
             const handleCta = () => {
-                if (event.cta.action === 'zoom') {
-                    /* PLACEHOLDER: ZOOM_LINK_MARCH_8 */
-                    alert('Zoom link coming soon! Check back before March 8th.');
+                if (event.cta.action === 'link' && event.cta.url && event.cta.url !== '#') {
+                    window.open(event.cta.url, '_blank', 'noopener,noreferrer');
+                } else if (event.cta.action === 'link') {
+                    alert('Link coming soon! Check back shortly.');
+                } else if (event.cta.action === 'register') {
+                    window.open('https://docs.google.com/forms/d/1D6t2Y2kOdrybYV3WfxLLtie8E-eazXoohhrX9L_WwJI/viewform', '_blank', 'noopener,noreferrer');
                 } else {
-                    scrollTo('enroll');
+                    window.open('https://docs.google.com/forms/d/1D6t2Y2kOdrybYV3WfxLLtie8E-eazXoohhrX9L_WwJI/viewform', '_blank', 'noopener,noreferrer');
                 }
             };
 
@@ -878,12 +949,12 @@
             const floatingWords = [
                 { text: 'build', top: '12%', left: '8%', size: '1.1rem', delay: '0s', duration: '8s' },
                 { text: 'create', top: '25%', right: '12%', size: '0.9rem', delay: '2s', duration: '10s' },
-                { text: 'dream', bottom: '30%', left: '15%', size: '1rem', delay: '1s', duration: '9s' },
+                { text: 'design', bottom: '30%', left: '15%', size: '1rem', delay: '1s', duration: '9s' },
                 { text: 'solve', top: '60%', right: '20%', size: '0.85rem', delay: '3s', duration: '11s' },
-                { text: 'ship', bottom: '18%', right: '8%', size: '1.05rem', delay: '4s', duration: '7s' },
-                { text: 'courage', top: '40%', left: '5%', size: '0.8rem', delay: '1.5s', duration: '12s' },
-                { text: 'own it', bottom: '40%', right: '5%', size: '0.95rem', delay: '2.5s', duration: '9s' },
-                { text: 'think', top: '75%', left: '25%', size: '0.85rem', delay: '0.5s', duration: '10s' },
+                { text: 'imagine', bottom: '18%', right: '8%', size: '1.05rem', delay: '4s', duration: '7s' },
+                { text: 'innovate', top: '40%', left: '5%', size: '0.8rem', delay: '1.5s', duration: '12s' },
+                { text: 'lead', bottom: '40%', right: '5%', size: '0.95rem', delay: '2.5s', duration: '9s' },
+                { text: 'dream', top: '75%', left: '25%', size: '0.85rem', delay: '0.5s', duration: '10s' },
             ];
 
             return (
@@ -902,9 +973,9 @@
                                         {item.label}
                                     </button>
                                 ))}
-                                <button onClick={() => scrollTo('enroll')} className="btn-primary" style={{ padding: '10px 20px', fontSize: '0.85rem', marginLeft: '0.5rem' }}>
-                                    Join the Revolution
-                                </button>
+                                <a href="https://lovable.dev/invite/JTHKTO5" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ padding: '10px 20px', fontSize: '0.85rem', marginLeft: '0.5rem', textDecoration: 'none' }}>
+                                    Start Building
+                                </a>
                             </div>
 
                             <button className={'hamburger' + (mobileMenuOpen ? ' open' : '')} onClick={toggleMobileMenu} aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'} aria-expanded={mobileMenuOpen}>
@@ -920,9 +991,9 @@
                         {navItems.map(item => (
                             <button key={item.id} className="mobile-nav-link" onClick={() => scrollTo(item.id)}>{item.label}</button>
                         ))}
-                        <button onClick={() => scrollTo('enroll')} className="btn-primary" style={{ marginTop: '1rem', fontSize: '1.1rem' }}>
-                            Join the Revolution
-                        </button>
+                        <a href="https://lovable.dev/invite/JTHKTO5" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ marginTop: '1rem', fontSize: '1.1rem', textDecoration: 'none' }}>
+                            Start Building
+                        </a>
                     </div>
 
                     <main id="main-content" style={{ paddingTop: '64px' }}>
@@ -953,28 +1024,28 @@
 
                             <div className="container-max" style={{ position: 'relative', zIndex: 2, textAlign: 'center', maxWidth: '800px' }}>
                                 <div className="font-mono" style={{ fontSize: '0.85rem', color: 'var(--warm-gold)', letterSpacing: '0.15em', marginBottom: '1.5rem', fontWeight: 500 }}>
-                                    YOU'RE A PROBLEM SOLVER.
+                                    WELCOME TO VIBE CODING ✨
                                 </div>
 
                                 <h1 style={{ fontSize: 'clamp(2.2rem, 6vw, 4rem)', fontWeight: 800, color: 'var(--cream)', lineHeight: 1.15, marginBottom: '1.5rem' }}>
-                                    We're just giving you the tools.
+                                    Where creativity meets technology.
                                 </h1>
 
                                 <p style={{ fontSize: 'clamp(1rem, 2.5vw, 1.25rem)', color: 'rgba(245, 240, 232, 0.8)', lineHeight: 1.7, marginBottom: '2.5rem', maxWidth: '640px', margin: '0 auto 2.5rem' }}>
-                                    GWV is where girls build what they wish existed. Not for grades. Not for approval. For impact and ownership.
+                                    Turn your ideas, passions, and real-life problems into apps, websites, games, and digital tools. No experience needed.
                                 </p>
 
                                 <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '1.5rem' }}>
-                                    <button onClick={() => scrollTo('enroll')} className="btn-primary" style={{ fontSize: '1.1rem', padding: '16px 36px' }}>
-                                        Join the Build Revolution
-                                    </button>
-                                    <button onClick={() => scrollTo('events')} className="btn-secondary">
-                                        See What's Coming
+                                    <a href="https://lovable.dev/invite/JTHKTO5" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ fontSize: '1.1rem', padding: '16px 36px', textDecoration: 'none' }}>
+                                        Start Building
+                                    </a>
+                                    <button onClick={() => scrollTo('what-gwv')} className="btn-secondary">
+                                        What is Vibe Coding?
                                     </button>
                                 </div>
 
-                                <p className="font-mono" style={{ fontSize: '0.8rem', color: 'var(--light-purple)', letterSpacing: '0.03em' }}>
-                                    Curiosity and courage. That's all you need.
+                                <p style={{ fontSize: 'clamp(0.85rem, 2.2vw, 1.1rem)', color: 'var(--cream)', letterSpacing: '0.05em', fontWeight: 700 }}>
+                                    You think it. You design it. You build it.
                                 </p>
                             </div>
 
@@ -993,17 +1064,27 @@
                             <div className="container-max">
                                 <Reveal>
                                     <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-                                        <div className="font-mono" style={{ fontSize: '0.8rem', color: 'var(--warm-gold)', letterSpacing: '0.15em', marginBottom: '0.75rem' }}>WHAT WE DO</div>
+                                        <div className="font-mono" style={{ fontSize: '0.8rem', color: 'var(--warm-gold)', letterSpacing: '0.15em', marginBottom: '0.75rem' }}>SO... WHAT IS VIBE CODING?</div>
                                         <h2 style={{ fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', fontWeight: 700, color: 'var(--cream)', marginBottom: '0.75rem' }}>
-                                            This is how it works.
+                                            Use plain language to code with intention.
                                         </h2>
-                                        <p style={{ color: 'rgba(245, 240, 232, 0.7)', maxWidth: '500px', margin: '0 auto' }}>
-                                            Click each card to see a real example of what you could build.
+                                        <ul style={{ listStyle: 'none', padding: 0, margin: '1.5rem auto 0', maxWidth: '600px', textAlign: 'left' }}>
+                                            <li style={{ color: 'rgba(245, 240, 232, 0.75)', fontSize: '1.05rem', marginBottom: '0.75rem', paddingLeft: '1.25rem', position: 'relative' }}>
+                                                <span style={{ position: 'absolute', left: 0, color: 'var(--warm-gold)' }}>•</span>
+                                                It's not about memorizing confusing code
+                                            </li>
+                                            <li style={{ color: 'rgba(245, 240, 232, 0.75)', fontSize: '1.05rem', paddingLeft: '1.25rem', position: 'relative' }}>
+                                                <span style={{ position: 'absolute', left: 0, color: 'var(--warm-gold)' }}>•</span>
+                                                As long as you have something you care about, the technology does the heavy lifting
+                                            </li>
+                                        </ul>
+                                        <p style={{ color: 'rgba(245, 240, 232, 0.5)', fontSize: '0.85rem', textAlign: 'center', marginTop: '1.5rem' }}>
+                                            Click each card below to see how it works.
                                         </p>
                                     </div>
                                 </Reveal>
 
-                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
+                                <div className="grid-2col" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }}>
                                     {flipCards.map((card, i) => (
                                         <FlipCard key={i} data={card} delay={i + 1} />
                                     ))}
@@ -1014,19 +1095,19 @@
                         <div className="section-divider"></div>
 
                         {/* ==================== WHY NOW ==================== */}
-                        <section style={{ padding: 'clamp(3rem, 6vw, 5rem) 1rem', background: 'var(--deep-purple)' }}>
+                        <section style={{ padding: 'clamp(3rem, 6vw, 5rem) 1rem', background: 'radial-gradient(ellipse at center, rgba(82, 28, 154, 0.35) 0%, var(--mid-purple) 70%, var(--deep-purple) 100%)' }}>
                             <div className="container-max" style={{ maxWidth: '800px' }}>
                                 <Reveal>
-                                    <div className="font-mono" style={{ fontSize: '0.8rem', color: 'var(--warm-gold)', letterSpacing: '0.15em', marginBottom: '2rem' }}>WHY NOW</div>
+                                    <div className="font-mono" style={{ fontSize: '0.8rem', color: 'var(--warm-gold)', letterSpacing: '0.15em', marginBottom: '2rem' }}>WHY WE TEACH IT</div>
                                 </Reveal>
 
                                 <Reveal delay={1}>
                                     <div className="accent-block" style={{ marginBottom: '2rem' }}>
                                         <h3 style={{ fontSize: '1.3rem', fontWeight: 700, color: 'var(--cream)', marginBottom: '0.5rem' }}>
-                                            Building is getting easier and faster.
+                                            We don't just want girls to learn how to code.
                                         </h3>
                                         <p style={{ color: 'rgba(245, 240, 232, 0.7)', lineHeight: 1.7 }}>
-                                            AI tools mean you don't need to be a coder to create real software. The barriers that kept people out are falling. Right now.
+                                            We want them to learn how to solve problems, think creatively, and build solutions that matter. Technology isn't just something you consume. It's something you can create.
                                         </p>
                                     </div>
                                 </Reveal>
@@ -1034,10 +1115,10 @@
                                 <Reveal delay={2}>
                                     <div className="accent-block" style={{ marginBottom: '2rem' }}>
                                         <h3 style={{ fontSize: '1.3rem', fontWeight: 700, color: 'var(--cream)', marginBottom: '0.5rem' }}>
-                                            The people who design solutions will shape what comes next.
+                                            AI is changing everything, and the timing matters.
                                         </h3>
                                         <p style={{ color: 'rgba(245, 240, 232, 0.7)', lineHeight: 1.7 }}>
-                                            That should include you. Your perspective. Your experience. Your ideas about what needs to exist.
+                                            AI tools mean you don't need years of experience to build real software. The barriers that kept people out are falling right now. Girls deserve to be part of this moment, not watching from the sidelines.
                                         </p>
                                     </div>
                                 </Reveal>
@@ -1045,19 +1126,19 @@
                                 <Reveal delay={3}>
                                     <div className="accent-block" style={{ marginBottom: '2.5rem' }}>
                                         <h3 style={{ fontSize: '1.3rem', fontWeight: 700, color: 'var(--cream)', marginBottom: '0.5rem' }}>
-                                            GWV exists so girls are not left out of what's being built.
+                                            When girls learn to build, they don't just follow trends.
                                         </h3>
                                         <p style={{ color: 'rgba(245, 240, 232, 0.7)', lineHeight: 1.7 }}>
-                                            Not as users. Not as followers. As builders. As owners. As the ones who decide what gets made.
+                                            They create them. They lead, not just participate, in the future of technology. That starts here.
                                         </p>
                                     </div>
                                 </Reveal>
 
                                 <Reveal type="scale">
-                                    <div style={{ background: 'rgba(196, 77, 63, 0.1)', border: '1px solid rgba(196, 77, 63, 0.3)', borderRadius: '12px', padding: '2rem', textAlign: 'center' }}>
+                                    <div style={{ background: 'rgba(212, 168, 83, 0.08)', border: '1px solid rgba(212, 168, 83, 0.3)', borderRadius: '12px', padding: '2rem', textAlign: 'center' }}>
                                         <p style={{ fontSize: '1.2rem', fontWeight: 600, color: 'var(--cream)', lineHeight: 1.6 }}>
-                                            The tools are here. The moment is now.<br/>
-                                            The only question is whether you're building or watching.
+                                            See something that could be better? Build an app.<br/>
+                                            Care about an issue in your community? Design a digital solution.
                                         </p>
                                     </div>
                                 </Reveal>
@@ -1067,17 +1148,14 @@
                         <div className="section-divider"></div>
 
                         {/* ==================== EVENTS ==================== */}
-                        <section id="events" style={{ padding: 'clamp(3rem, 6vw, 5rem) 1rem', background: 'var(--mid-purple)' }}>
+                        <section id="events" style={{ padding: 'clamp(3rem, 6vw, 5rem) 1rem', background: 'radial-gradient(ellipse at center, rgba(82, 28, 154, 0.35) 0%, var(--mid-purple) 70%, var(--deep-purple) 100%)' }}>
                             <div className="container-max">
                                 <Reveal>
                                     <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
                                         <div className="font-mono" style={{ fontSize: '0.8rem', color: 'var(--warm-gold)', letterSpacing: '0.15em', marginBottom: '0.75rem' }}>UPCOMING</div>
-                                        <h2 style={{ fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', fontWeight: 700, color: 'var(--cream)', marginBottom: '0.75rem' }}>
+                                        <h2 style={{ fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', fontWeight: 700, color: 'var(--cream)', marginBottom: '0' }}>
                                             What's Coming Up
                                         </h2>
-                                        <p style={{ color: 'rgba(245, 240, 232, 0.7)', maxWidth: '500px', margin: '0 auto' }}>
-                                            Hackathons, free build days, and guided camps. Pick your entry point.
-                                        </p>
                                     </div>
                                 </Reveal>
 
@@ -1108,21 +1186,22 @@
                             <div className="container-max" style={{ maxWidth: '900px' }}>
                                 <Reveal>
                                     <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-                                        <div className="font-mono" style={{ fontSize: '0.8rem', color: 'var(--warm-gold)', letterSpacing: '0.15em', marginBottom: '0.75rem' }}>THE RESULT</div>
+                                        <div className="font-mono" style={{ fontSize: '0.8rem', color: 'var(--warm-gold)', letterSpacing: '0.15em', marginBottom: '0.75rem' }}>OUR MISSION</div>
                                         <h2 style={{ fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', fontWeight: 700, color: 'var(--cream)', marginBottom: '0.75rem' }}>
-                                            What You Walk Away With
+                                            We empower girls to:
                                         </h2>
                                         <p style={{ color: 'rgba(245, 240, 232, 0.7)' }}>
-                                            This isn't theory. This is yours.
+                                            Real skills. Real projects. Real confidence.
                                         </p>
                                     </div>
                                 </Reveal>
 
-                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
+                                <div className="grid-2col" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }}>
                                     {outcomes.map((item, i) => (
                                         <Reveal key={i} delay={i + 1}>
                                             <div className="outcome-block">
                                                 <div className="outcome-number">{item.num}</div>
+                                                <div style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>{item.icon}</div>
                                                 <h3 style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--cream)', marginBottom: '0.5rem' }}>
                                                     {item.title}
                                                 </h3>
@@ -1133,6 +1212,21 @@
                                         </Reveal>
                                     ))}
                                 </div>
+
+                                <Reveal type="scale">
+                                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.25rem', marginTop: '2.5rem' }}>
+                                        <div className="glass-card" style={{ padding: '1.5rem', textAlign: 'center' }}>
+                                            <p style={{ color: 'var(--cream)', fontStyle: 'italic', fontSize: '1.05rem', lineHeight: 1.6 }}>
+                                                "I didn't think I could build an app. Now I have one with my name on it."
+                                            </p>
+                                        </div>
+                                        <div className="glass-card" style={{ padding: '1.5rem', textAlign: 'center' }}>
+                                            <p style={{ color: 'var(--cream)', fontStyle: 'italic', fontSize: '1.05rem', lineHeight: 1.6 }}>
+                                                "I used to just scroll. Now I'm the one building the stuff people use."
+                                            </p>
+                                        </div>
+                                    </div>
+                                </Reveal>
                             </div>
                         </section>
 
@@ -1143,21 +1237,21 @@
                             <div className="container-max" style={{ maxWidth: '650px' }}>
                                 <Reveal type="scale">
                                     <h2 style={{ fontSize: 'clamp(1.8rem, 5vw, 3rem)', fontWeight: 800, color: 'var(--cream)', lineHeight: 1.2, marginBottom: '1.5rem' }}>
-                                        You don't need to be{' '}
+                                        Never coded before?{' '}
                                         <span className="shimmer-underline" style={{ color: 'var(--warm-gold)' }}>
-                                            "a tech girl."
+                                            Perfect.
                                         </span>
                                     </h2>
                                 </Reveal>
                                 <Reveal delay={1}>
                                     <p style={{ fontSize: 'clamp(1rem, 2.5vw, 1.15rem)', color: 'rgba(245, 240, 232, 0.8)', lineHeight: 1.8, marginBottom: '2.5rem' }}>
-                                        You need curiosity and courage. That's it. The tools handle the technical part. You bring the vision, the frustration, the idea that won't let you sleep. We'll show you how to build it.
+                                        You don't need experience. You need an idea, a problem you care about, or even just curiosity. AI tools handle the technical heavy lifting. You bring the vision. You show up, we'll help you do the rest.
                                     </p>
                                 </Reveal>
                                 <Reveal delay={2}>
-                                    <button onClick={() => scrollTo('enroll')} className="btn-primary" style={{ fontSize: '1.1rem', padding: '16px 40px' }}>
+                                    <a href="https://lovable.dev/invite/JTHKTO5" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ fontSize: '1.1rem', padding: '16px 40px', textDecoration: 'none' }}>
                                         Start Building
-                                    </button>
+                                    </a>
                                 </Reveal>
                             </div>
                         </section>
@@ -1173,7 +1267,7 @@
                                         <h2 style={{ fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', fontWeight: 700, color: 'var(--cream)', marginBottom: '0.75rem' }}>
                                             For Trusted Adults and Allies
                                         </h2>
-                                        <p style={{ color: 'rgba(245, 240, 232, 0.7)', maxWidth: '550px', margin: '0 auto' }}>
+                                        <p style={{ color: 'rgba(245, 240, 232, 0.7)', maxWidth: '700px', margin: '0 auto', whiteSpace: 'nowrap' }}>
                                             Parents, mentors, educators, counselors. Here's what you need to know.
                                         </p>
                                     </div>
@@ -1185,10 +1279,10 @@
                                             <h3 style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--warm-gold)', marginBottom: '1rem' }}>What GWV Is</h3>
                                             <ul style={{ listStyle: 'none', padding: 0 }}>
                                                 {[
-                                                    'A guided build space (not a coding bootcamp)',
-                                                    'Girls identify real problems and build real solutions',
-                                                    'AI-enhanced tools mean no prior experience needed',
-                                                    'Strengthens agency, collaboration, and problem solving'
+                                                    'Girls build real apps, websites, and tools',
+                                                    'No coding experience needed',
+                                                    'They choose projects based on what they care about',
+                                                    'Builds problem-solving and creative thinking skills'
                                                 ].map((item, i) => (
                                                     <li key={i} style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.75rem', color: 'rgba(245, 240, 232, 0.8)', fontSize: '0.9rem', lineHeight: 1.6 }}>
                                                         <span style={{ color: 'var(--warm-gold)', flexShrink: 0 }}>{'\u25C6'}</span>
@@ -1201,13 +1295,13 @@
 
                                     <Reveal delay={2}>
                                         <div className="glass-card" style={{ height: '100%' }}>
-                                            <h3 style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--warm-gold)', marginBottom: '1rem' }}>The Inner Work</h3>
+                                            <h3 style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--warm-gold)', marginBottom: '1rem' }}>What They'll Learn</h3>
                                             <ul style={{ listStyle: 'none', padding: 0 }}>
                                                 {[
-                                                    'AI-enhanced mindfulness pathways',
-                                                    'Forgiveness and attitudinal healing practices',
-                                                    'Social-emotional learning woven into every session',
-                                                    'A practice for processing and moving forward, not therapy'
+                                                    'Turn an idea into a working prototype',
+                                                    'Use AI as a creative building partner',
+                                                    'Design thinking and problem-solving',
+                                                    'Confidence to lead and create with tech'
                                                 ].map((item, i) => (
                                                     <li key={i} style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.75rem', color: 'rgba(245, 240, 232, 0.8)', fontSize: '0.9rem', lineHeight: 1.6 }}>
                                                         <span style={{ color: 'var(--bright-purple)', flexShrink: 0 }}>{'\u25C6'}</span>
@@ -1223,10 +1317,10 @@
                                             <h3 style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--warm-gold)', marginBottom: '1rem' }}>What It's NOT</h3>
                                             <ul style={{ listStyle: 'none', padding: 0 }}>
                                                 {[
-                                                    'No KPIs or productivity metrics',
-                                                    'Not about grades or college applications',
-                                                    'Not about turning kids into engineers',
-                                                    "It's about agency, ownership, and purpose"
+                                                    'Not a coding bootcamp',
+                                                    'Not about grades or test scores',
+                                                    'Not about becoming a software engineer',
+                                                    'It\'s about creativity, confidence, and building'
                                                 ].map((item, i) => (
                                                     <li key={i} style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.75rem', color: 'rgba(245, 240, 232, 0.8)', fontSize: '0.9rem', lineHeight: 1.6 }}>
                                                         <span style={{ color: 'var(--terracotta)', flexShrink: 0 }}>{'\u25C6'}</span>
@@ -1240,12 +1334,12 @@
 
                                 <Reveal type="scale">
                                     <div style={{ background: 'rgba(212, 168, 83, 0.06)', border: '1px solid rgba(212, 168, 83, 0.25)', borderRadius: '12px', padding: '2rem', textAlign: 'center' }}>
-                                        <p style={{ fontSize: '1.05rem', color: 'var(--cream)', marginBottom: '1.5rem', lineHeight: 1.7 }}>
-                                            How can you help? Refer a girl who needs this. Sponsor a seat. Or just share the link.
+                                        <p style={{ fontSize: '1.1rem', color: 'var(--cream)', marginBottom: '1.5rem', lineHeight: 1.7, whiteSpace: 'nowrap' }}>
+                                            Know a girl with big ideas? Refer her. Want to help: sponsor a spot.
                                         </p>
-                                        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-                                            <button onClick={() => scrollTo('enroll')} className="btn-primary">Refer Someone</button>
-                                            <a href="mailto:admin@practicecenter.org" className="btn-secondary">Contact Us</a>
+                                        <div style={{ display: 'flex', gap: '1.25rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+                                            <a href="https://docs.google.com/forms/d/1D6t2Y2kOdrybYV3WfxLLtie8E-eazXoohhrX9L_WwJI/viewform" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ fontSize: '1.1rem', padding: '16px 36px', textDecoration: 'none', display: 'inline-block' }}>Refer to GWV</a>
+                                            <a href="mailto:admin@practicecenter.org" className="btn-secondary" style={{ fontSize: '1.1rem', padding: '14px 34px' }}>Contact Us</a>
                                         </div>
                                     </div>
                                 </Reveal>
@@ -1270,15 +1364,15 @@
                                 </Reveal>
 
                                 {/* Resource links */}
-                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem', marginBottom: '3rem' }}>
-                                    <Reveal delay={1}>
-                                        <a href="https://lovable.dev/invite/JTHKTO5" target="_blank" rel="noopener noreferrer" className="glass-card" style={{ display: 'block', textDecoration: 'none', textAlign: 'center' }}>
+                                <div className="grid-2col" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem', marginBottom: '3rem' }}>
+                                    <Reveal delay={1} className="" style={{ height: '100%' }}>
+                                        <a href="https://lovable.dev/invite/JTHKTO5" target="_blank" rel="noopener noreferrer" className="glass-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', textDecoration: 'none', textAlign: 'center', height: '100%' }}>
                                             <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--warm-gold)', marginBottom: '0.5rem' }}>Lovable</h3>
                                             <p style={{ color: 'rgba(245, 240, 232, 0.7)', fontSize: '0.9rem' }}>Get a free account to start building. 5 credits to play with.</p>
                                         </a>
                                     </Reveal>
-                                    <Reveal delay={2}>
-                                        <div className="glass-card" style={{ textAlign: 'center' }}>
+                                    <Reveal delay={2} style={{ height: '100%' }}>
+                                        <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', textAlign: 'center', height: '100%' }}>
                                             <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--warm-gold)', marginBottom: '0.5rem' }}>Claude AI</h3>
                                             <p style={{ color: 'rgba(245, 240, 232, 0.7)', fontSize: '0.9rem' }}>
                                                 Your AI thinking partner for building.
@@ -1301,8 +1395,7 @@
                                     </div>
                                 </Reveal>
 
-                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
-                                    {/* PLACEHOLDER: TUTORIAL_CONTENT */}
+                                <div className="grid-3col" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
                                     {tutorialPlaceholders.map((title, i) => (
                                         <Reveal key={i} delay={Math.min(i + 1, 4)}>
                                             <div className="tutorial-placeholder">
@@ -1322,29 +1415,27 @@
                             <div className="container-max" style={{ maxWidth: '800px' }}>
                                 <Reveal>
                                     <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-                                        <div className="font-mono" style={{ fontSize: '0.8rem', color: 'var(--warm-gold)', letterSpacing: '0.15em', marginBottom: '0.75rem' }}>LET'S GO</div>
+                                        <div className="font-mono" style={{ fontSize: '0.8rem', color: 'var(--warm-gold)', letterSpacing: '0.15em', marginBottom: '0.75rem' }}>GET STARTED</div>
                                         <h2 style={{ fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', fontWeight: 700, color: 'var(--cream)', marginBottom: '0.75rem' }}>
-                                            Ready? Let's Go.
+                                            Ready to start building?
                                         </h2>
                                         <p style={{ color: 'rgba(245, 240, 232, 0.7)' }}>
-                                            Fill out the form below. It takes about 5 minutes.
+                                            Sign up below. It takes about 5 minutes. No experience needed, just bring your ideas.
                                         </p>
                                     </div>
                                 </Reveal>
 
                                 <Reveal type="scale">
-                                    {/* Google Form Embed Placeholder */}
-                                    <div style={{ background: 'var(--mid-purple)', borderRadius: '12px', border: '1px solid rgba(123, 79, 158, 0.3)', padding: '2rem', marginBottom: '2rem', textAlign: 'center' }}>
-                                        {/* PLACEHOLDER: GOOGLE_FORM_EMBED_URL - Replace the div below with your iframe */}
-                                        <div style={{ background: 'rgba(123, 79, 158, 0.1)', borderRadius: '8px', padding: '3rem 1.5rem', border: '2px dashed rgba(123, 79, 158, 0.3)' }}>
-                                            <p style={{ color: 'var(--light-purple)', fontWeight: 600, marginBottom: '0.5rem' }}>Enrollment Form Goes Here</p>
-                                            <p style={{ color: 'rgba(245, 240, 232, 0.5)', fontSize: '0.85rem', marginBottom: '1rem' }}>
-                                                Replace this placeholder with your Google Form embed URL
-                                            </p>
-                                            <code className="font-mono" style={{ fontSize: '0.75rem', color: 'var(--light-purple)', background: 'rgba(0,0,0,0.2)', padding: '0.5rem 1rem', borderRadius: '4px', display: 'inline-block' }}>
-                                                PLACEHOLDER: GOOGLE_FORM_EMBED_URL
-                                            </code>
-                                        </div>
+                                    <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+                                        <a
+                                            href="https://docs.google.com/forms/d/1D6t2Y2kOdrybYV3WfxLLtie8E-eazXoohhrX9L_WwJI/viewform"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="btn-primary"
+                                            style={{ fontSize: '1.15rem', padding: '18px 44px', display: 'inline-block', textDecoration: 'none' }}
+                                        >
+                                            Open Registration Form
+                                        </a>
                                     </div>
                                 </Reveal>
 
@@ -1356,15 +1447,30 @@
                                             Sliding scale: $1 to $5,000. Pay what makes sense for your family. We mean it.
                                         </p>
                                         <p style={{ color: 'rgba(245, 240, 232, 0.55)', fontSize: '0.85rem', marginBottom: '1.5rem' }}>
-                                            You'll be redirected to Stripe's secure checkout where you choose your amount.
+                                            Choose the amount that works for you. You'll be redirected to Stripe's secure checkout.
                                         </p>
-                                        {/* PLACEHOLDER: STRIPE_PAYMENT_LINK - Replace # with your Stripe Payment Link URL */}
-                                        <a href="#" className="btn-primary" target="_blank" rel="noopener noreferrer" style={{ fontSize: '1.05rem', padding: '14px 36px' }}>
-                                            Pay Registration Fee
-                                        </a>
+                                        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+                                            <a href="https://buy.stripe.com/test_9B69ATgwr2MmfcO7qZ7g402" className="btn-secondary" target="_blank" rel="noopener noreferrer" style={{ fontSize: '1.05rem', padding: '14px 32px', textDecoration: 'none' }}>
+                                                $1
+                                            </a>
+                                            <a href="https://buy.stripe.com/test_5kQ6oH3JF72Cd4G4eN7g403" className="btn-primary" target="_blank" rel="noopener noreferrer" style={{ fontSize: '1.05rem', padding: '14px 32px', textDecoration: 'none' }}>
+                                                $150
+                                            </a>
+                                            <a href="https://buy.stripe.com/test_dRmaEX0xt5Yyd4G12B7g404" className="btn-secondary" target="_blank" rel="noopener noreferrer" style={{ fontSize: '1.05rem', padding: '14px 32px', textDecoration: 'none' }}>
+                                                $500
+                                            </a>
+                                        </div>
                                         <p className="font-mono" style={{ fontSize: '0.7rem', color: 'var(--light-purple)', marginTop: '1rem' }}>
                                             Secure payment powered by Stripe
                                         </p>
+                                        <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
+                                            <p style={{ color: 'rgba(245, 240, 232, 0.55)', fontSize: '0.85rem', marginBottom: '0.75rem' }}>
+                                                Want to donate any amount?
+                                            </p>
+                                            <a href="https://account.venmo.com/u/ThePracticeCenter" className="btn-secondary" target="_blank" rel="noopener noreferrer" style={{ fontSize: '1.05rem', padding: '14px 36px', textDecoration: 'none' }}>
+                                                Donate via Venmo
+                                            </a>
+                                        </div>
                                     </div>
                                 </Reveal>
                             </div>
@@ -1383,7 +1489,7 @@
                                             <span style={{ fontWeight: 700, color: 'var(--warm-gold)', fontSize: '1rem' }}>Girls Who Vibe</span>
                                         </div>
                                         <p style={{ color: 'rgba(245, 240, 232, 0.5)', fontSize: '0.85rem', lineHeight: 1.6 }}>
-                                            Turning real issues into real tools, with AI, sisterhood, and purpose.
+                                            Where creativity meets technology. Teaching girls to build what they wish existed.
                                         </p>
                                     </div>
 
@@ -1410,11 +1516,11 @@
                                                onMouseLeave={e => e.target.style.color = 'rgba(245, 240, 232, 0.6)'}>
                                                 Learn More
                                             </button>
-                                            <button onClick={() => scrollTo('enroll')} style={{ color: 'rgba(245, 240, 232, 0.6)', background: 'none', border: 'none', padding: 0, textAlign: 'left', fontSize: '0.85rem', cursor: 'pointer', transition: 'color 0.3s' }}
+                                            <a href="https://docs.google.com/forms/d/1D6t2Y2kOdrybYV3WfxLLtie8E-eazXoohhrX9L_WwJI/viewform" target="_blank" rel="noopener noreferrer" style={{ color: 'rgba(245, 240, 232, 0.6)', background: 'none', border: 'none', padding: 0, textAlign: 'left', fontSize: '0.85rem', cursor: 'pointer', transition: 'color 0.3s', textDecoration: 'none' }}
                                                onMouseEnter={e => e.target.style.color = 'var(--warm-gold)'}
                                                onMouseLeave={e => e.target.style.color = 'rgba(245, 240, 232, 0.6)'}>
                                                 Refer a Girl
-                                            </button>
+                                            </a>
                                             <a href="mailto:admin@practicecenter.org" style={{ color: 'rgba(245, 240, 232, 0.6)', textDecoration: 'none', fontSize: '0.85rem', transition: 'color 0.3s' }}
                                                onMouseEnter={e => e.target.style.color = 'var(--warm-gold)'}
                                                onMouseLeave={e => e.target.style.color = 'rgba(245, 240, 232, 0.6)'}>
